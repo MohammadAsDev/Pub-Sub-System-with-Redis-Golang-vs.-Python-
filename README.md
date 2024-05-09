@@ -18,7 +18,7 @@ The thing that I will do is:
 
 **Docker** is a great technology, so instead of installing redis on your device directly, you can build a **redis-container** by this command
 
-​​    > `docker-compose -f docker-compose-redis-only.yml`
+​​    >`docker-compose -f docker-compose-redis-only.yml`
 
 ## Golang
 
@@ -115,5 +115,5 @@ The results that I have get is:
     ![memory consumption](golang/mem_2.png)
 
 
-**The Winner is:** Python, but Golang also have tiny memory consumption comparing to Golang.
+**The Winner is:** Python, but Golang also have tiny memory consumption comparing to Python.
 
