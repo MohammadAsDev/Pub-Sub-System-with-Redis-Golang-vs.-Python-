@@ -1,0 +1,4 @@
+python/main_env/
+python/__pycache__/
+golang/*.out
+    
