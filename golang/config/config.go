@@ -14,6 +14,12 @@ type Config struct {
 	} `yaml:"redis"`
 }
 
+type GlobalConfig struct {
+	NPubs int `yaml:"n_pubs"`
+	NSubs int `yaml:"n_subs"`
+	NMsgs int `yaml:"n_messages"`
+}
+
 func ReadConfig() (*Config, error) {
 	config := &Config{}
 	config_bytes, err := os.ReadFile("config.yaml")
@@ -23,9 +29,23 @@ func ReadConfig() (*Config, error) {
 	}
 
 	if err := yaml.Unmarshal(config_bytes, config); err != nil {
-		return nil, errors.New("can't marshal config file")
+		return nil, errors.New("can't unmarshal config file")
 	}
 
 	return config, nil
 
+}
+
+func ReadGlobalConfig(file_path string) (*GlobalConfig, error) {
+	config := &GlobalConfig{}
+	config_bytes, err := os.ReadFile(file_path)
+	if err != nil {
+		return nil, errors.New("can't load the global config file")
+	}
+
+	if err := yaml.Unmarshal(config_bytes, config); err != nil {
+		return nil, errors.New("can't unmarshal global config file")
+	}
+
+	return config, nil
 }

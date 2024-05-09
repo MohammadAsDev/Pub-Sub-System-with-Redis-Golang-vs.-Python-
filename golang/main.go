@@ -4,10 +4,12 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"path"
 	"runtime/pprof"
 	"runtime/trace"
 	"time"
 
+	"github.com/MohammadAsDev/pub_sub/config"
 	"github.com/MohammadAsDev/pub_sub/publisher"
 	"github.com/MohammadAsDev/pub_sub/subscriber"
 )
@@ -54,13 +56,16 @@ func publishDumpMessages(publisher publisher.Publisher, nMessages int) {
 }
 
 func waitDumpMessages(subscriber subscriber.Subscriber) {
+
+	// removing printing operation for large number of operations
+
 	message_chan, err_chan := subscriber.Subscribe()
 	// log.Printf("[subscriber-%d]: start waiting for messages...\n", subscriber.Id())
 	for {
 		select {
-		case <-message_chan:
+		case <-message_chan: // case msg := <- message_chan
 			// fmt.Printf("[subscriber-%d]: %s\n", subscriber.Id(), string(msg))
-		case <-err_chan:
+		case <-err_chan: // case err := <- err_chan
 			// log.Printf("[subscriber-%d]: failed to get messages, error=%v", subscriber.Id(), err)
 			return
 		}
@@ -81,13 +86,17 @@ func main() {
 	mem_f, _ := os.Create("mem.out")
 	defer mem_f.Close()
 
-	n_publishers := 500
-	n_subscribers := 500
+	global_config, err := config.ReadGlobalConfig(path.Join("..", "config.yaml"))
+	if err != nil {
+		panic(err)
+	}
+	n_publishers := global_config.NPubs
+	n_subscribers := global_config.NSubs
 
 	publishers := generatePublishers(n_publishers)
 	subscribers := generateSubscribers(n_subscribers)
 
-	n_messages := 100
+	n_messages := global_config.NMsgs
 
 	for _, pub := range publishers {
 		go publishDumpMessages(pub, n_messages)

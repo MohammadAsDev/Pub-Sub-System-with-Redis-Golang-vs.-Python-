@@ -3,6 +3,7 @@ import publisher
 from multiprocessing.pool import ThreadPool
 import time
 import cProfile
+import yaml
 
 TESTING_CHANNEL = "testing_python3_channel"
 PUB_MAX_WORKERS = 5
@@ -20,10 +21,19 @@ def generate_subscribers(n_subscribers : int) -> list:
         subscribers.append(subscriber.Subscriber(i , TESTING_CHANNEL))
     return subscribers
 
+def load_config(config_path : str) -> dict:
+    with open(config_path, 'r') as file:
+        data = yaml.safe_load(file)
+
+    return data
+
 def main():
-    n_pubs  = 1000
-    n_subs = 1000
-    n_messages = 100
+
+    config = load_config("../config.yaml")
+
+    n_pubs  = config["n_pubs"]
+    n_subs = config["n_subs"]
+    n_messages = config["n_messages"]
     pubs = generate_publishers(n_pubs)
     subs = generate_subscribers(n_subs)
 
@@ -42,7 +52,7 @@ def main():
         sub_pool.apply_async(sub.listen)
 
 
-    time.sleep(60)  # running the script for 10secs
+    time.sleep(60)  # running the script for a random amount of time
 
 if __name__ == "__main__":
     """
