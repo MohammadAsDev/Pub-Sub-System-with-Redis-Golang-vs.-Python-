@@ -14,6 +14,12 @@ The thing that I will do is:
 
 >running one thousand (1000) subscribers and one thousand (1000) publishers, each publisher has to publish one hundred (100) messages via a specific Redis channel, and finally see how much time and memory the process consumes.
 
+## UPDATE: DOCKER COMPOSE 
+
+**Docker** is a great technology, so instead of installing redis on your device directly, you can build a **redis-container** by this command
+
+​​    > `docker-compose -f docker-compose-redis-only.yml`
+
 ## Golang
 
 the **Redis** library that I am using is [go-redis](https://github.com/redis/go-redis), you can install it with the following command:
